@@ -1,11 +1,13 @@
 package io.github.dabogadog;
 
+import io.github.dabogadog.models.BateryTemp.ConsolidadoTestBatteryTemp;
 import io.github.dabogadog.models.CpuMem.ConsolidadoTestCpuMem;
 
 import static io.github.dabogadog.listEjecution.ApiConsumerListEjecution.searchIdByName;
 import static io.github.dabogadog.sessionIds.ApiSessionIds.getSessionIds;
-import static io.github.dabogadog.utils.ManageData.getCpuMetrics;
-import static io.github.dabogadog.utils.ManageData.getMemMetrics;
+import static io.github.dabogadog.utils.ManageBatteryTempData.getBatteryTempMetrics;
+import static io.github.dabogadog.utils.ManageCpuData.getCpuMetrics;
+import static io.github.dabogadog.utils.ManageCpuData.getMemMetrics;
 
 public class Main {
     public static void main(String[] args) {
@@ -23,10 +25,11 @@ public class Main {
 
         ConsolidadoTestCpuMem consolidadoTestCpu = getCpuMetrics(sessionIdsArray, "cpu");
         ConsolidadoTestCpuMem consolidadoTestMem = getMemMetrics(sessionIdsArray, "mem");
+        ConsolidadoTestBatteryTemp consolidadoTestBattery = getBatteryTempMetrics(sessionIdsArray);
 
 
 
-        printData(consolidadoTestCpu, consolidadoTestMem);
+        printData(consolidadoTestCpu, consolidadoTestMem,consolidadoTestBattery);
 
 
         //Llamado a cada api - pendiente el llamado a todos y no solo al primero
@@ -59,7 +62,7 @@ public class Main {
 
     }
 
-    public static void printData(ConsolidadoTestCpuMem consolidadoTestCpu, ConsolidadoTestCpuMem consolidadoTestMem){
+    public static void printData(ConsolidadoTestCpuMem consolidadoTestCpu, ConsolidadoTestCpuMem consolidadoTestMem, ConsolidadoTestBatteryTemp consolidadoTestBattery){
         System.out.println("Indicadores de cpu de la app- consumo maximo -> " + consolidadoTestCpu.appMax);
         System.out.println("Indicadores de cpu de la app- consumo minimo -> " + consolidadoTestCpu.appMin);
         System.out.println("Indicadores de cpu de la app- consumo promedio -> " + consolidadoTestCpu.appAvg);
@@ -72,6 +75,12 @@ public class Main {
         System.out.println("Indicadores de memoria del sistema- consumo maximo -> " + consolidadoTestMem.sysMax);
         System.out.println("Indicadores de memoria del sistema- consumo minimo -> " + consolidadoTestMem.sysMin);
         System.out.println("Indicadores de memoria del sistema- consumo promedio -> " + consolidadoTestMem.sysAvg);
+        System.out.println("Indicadores de bateria- consumo maximo -> " + consolidadoTestBattery.batteryMax);
+        System.out.println("Indicadores de bateria- consumo minimo -> " + consolidadoTestBattery.batteryMin);
+        System.out.println("Indicadores de bateria- consumo promedio -> " + consolidadoTestBattery.batteryAvg);
+        System.out.println("Indicadores de temperatura- consumo maximo -> " + consolidadoTestBattery.temperatureMax);
+        System.out.println("Indicadores de temperatura- consumo minimo -> " + consolidadoTestBattery.temperatureMin);
+        System.out.println("Indicadores de temperatura- consumo promedio -> " + consolidadoTestBattery.temperatureAvg);
     }
 
 }

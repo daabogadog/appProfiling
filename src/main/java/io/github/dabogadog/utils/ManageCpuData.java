@@ -11,7 +11,7 @@ import java.util.List;
 
 import static io.github.dabogadog.httpUtils.ApiConfig.BASE_URL;
 
-public class ManageData {
+public class ManageCpuData {
 
     public static ConsolidadoTestCpuMem getCpuMetrics(String[] sessionIdsArray, String type) {
         List<ConsolidadoTestCpuMem> listaConsolidadoTestCpuMem = getCpuMemMetricsFromEachTest(sessionIdsArray, type);
