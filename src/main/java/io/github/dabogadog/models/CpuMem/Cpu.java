@@ -1,4 +1,4 @@
-package io.github.dabogadog;
+package io.github.dabogadog.models.CpuMem;
 
 public class Cpu {
     public String type;

@@ -1,14 +1,11 @@
 package io.github.dabogadog;
 
-import com.google.gson.reflect.TypeToken;
-import io.restassured.RestAssured;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
+import io.github.dabogadog.models.CpuMem.ConsolidadoTestCpuMem;
 
 import static io.github.dabogadog.listEjecution.ApiConsumerListEjecution.searchIdByName;
 import static io.github.dabogadog.sessionIds.ApiSessionIds.getSessionIds;
+import static io.github.dabogadog.utils.ManageData.getCpuMetrics;
+import static io.github.dabogadog.utils.ManageData.getMemMetrics;
 
 public class Main {
     public static void main(String[] args) {
@@ -27,18 +24,10 @@ public class Main {
         ConsolidadoTestCpuMem consolidadoTestCpu = getCpuMetrics(sessionIdsArray, "cpu");
         ConsolidadoTestCpuMem consolidadoTestMem = getMemMetrics(sessionIdsArray, "mem");
 
-        System.out.println("Indicadores de cpu de la app- consumo maximo -> " + consolidadoTestCpu.appMax);
-        System.out.println("Indicadores de cpu de la app- consumo minimo -> " + consolidadoTestCpu.appMin);
-        System.out.println("Indicadores de cpu de la app- consumo promedio -> " + consolidadoTestCpu.appAvg);
-        System.out.println("Indicadores de memoria de la app- consumo maximo -> " + consolidadoTestMem.appMax);
-        System.out.println("Indicadores de memoria de la app- consumo minimo -> " + consolidadoTestMem.appMin);
-        System.out.println("Indicadores de memoria de la app- consumo promedio -> " + consolidadoTestMem.appAvg);
-        System.out.println("Indicadores de cpu del sistema- consumo maximo -> " + consolidadoTestCpu.sysMax);
-        System.out.println("Indicadores de cpu del sistema- consumo minimo -> " + consolidadoTestCpu.sysMin);
-        System.out.println("Indicadores de cpu del sistema- consumo promedio -> " + consolidadoTestCpu.sysAvg);
-        System.out.println("Indicadores de memoria del sistema- consumo maximo -> " + consolidadoTestMem.sysMax);
-        System.out.println("Indicadores de memoria del sistema- consumo minimo -> " + consolidadoTestMem.sysMin);
-        System.out.println("Indicadores de memoria del sistema- consumo promedio -> " + consolidadoTestMem.sysAvg);
+
+
+        printData(consolidadoTestCpu, consolidadoTestMem);
+
 
         //Llamado a cada api - pendiente el llamado a todos y no solo al primero
 //        String responseJsonApiProfiling = ApiProfiling.obtainApiProfiling(sessionIdsArray[1].trim(), AuthorizationBasic);
@@ -70,119 +59,19 @@ public class Main {
 
     }
 
-    public static ConsolidadoTestCpuMem getCpuMetrics(String[] sessionIdsArray, String type) {
-        List<ConsolidadoTestCpuMem> listaConsolidadoTestCpuMem = getCpuMemMetricsFromEachTest(sessionIdsArray, type);
-        return getConsolidatedCpuMemMetrics(listaConsolidadoTestCpuMem);
+    public static void printData(ConsolidadoTestCpuMem consolidadoTestCpu, ConsolidadoTestCpuMem consolidadoTestMem){
+        System.out.println("Indicadores de cpu de la app- consumo maximo -> " + consolidadoTestCpu.appMax);
+        System.out.println("Indicadores de cpu de la app- consumo minimo -> " + consolidadoTestCpu.appMin);
+        System.out.println("Indicadores de cpu de la app- consumo promedio -> " + consolidadoTestCpu.appAvg);
+        System.out.println("Indicadores de memoria de la app- consumo maximo -> " + consolidadoTestMem.appMax);
+        System.out.println("Indicadores de memoria de la app- consumo minimo -> " + consolidadoTestMem.appMin);
+        System.out.println("Indicadores de memoria de la app- consumo promedio -> " + consolidadoTestMem.appAvg);
+        System.out.println("Indicadores de cpu del sistema- consumo maximo -> " + consolidadoTestCpu.sysMax);
+        System.out.println("Indicadores de cpu del sistema- consumo minimo -> " + consolidadoTestCpu.sysMin);
+        System.out.println("Indicadores de cpu del sistema- consumo promedio -> " + consolidadoTestCpu.sysAvg);
+        System.out.println("Indicadores de memoria del sistema- consumo maximo -> " + consolidadoTestMem.sysMax);
+        System.out.println("Indicadores de memoria del sistema- consumo minimo -> " + consolidadoTestMem.sysMin);
+        System.out.println("Indicadores de memoria del sistema- consumo promedio -> " + consolidadoTestMem.sysAvg);
     }
 
-    public static ConsolidadoTestCpuMem getMemMetrics(String[] sessionIdsArray, String type) {
-        List<ConsolidadoTestCpuMem> listaConsolidadoTestCpuMem = getCpuMemMetricsFromEachTest(sessionIdsArray, type);
-        return getConsolidatedCpuMemMetrics(listaConsolidadoTestCpuMem);
-    }
-
-    public static List<ConsolidadoTestCpuMem> getCpuMemMetricsFromEachTest(String[] sessionIdList, String type) {
-        List<ConsolidadoTestCpuMem> listaConsolidadoTestCpuMem = new ArrayList<>();
-
-        for (String sessionID : sessionIdList) {
-            List<Cpu> listCpuMem = getAllCpuMemDataFromBuild(sessionID, type);
-            ConsolidadoTestCpuMem metricsFromEachTest = getMetricForEachTest(listCpuMem);
-            listaConsolidadoTestCpuMem.add(metricsFromEachTest);
-        }
-        return listaConsolidadoTestCpuMem;
-    }
-
-    public static ConsolidadoTestCpuMem getMetricForEachTest(List<Cpu> listCpuMem) {
-
-        return ConsolidadoTestCpuMem
-                .builder()
-                .sysMax(getSysMax(listCpuMem))
-                .sysMin(getSysMin(listCpuMem))
-                .sysAvg(getSysAvg(listCpuMem))
-                .appMax(getAppMax(listCpuMem))
-                .appMin(getAppMin(listCpuMem))
-                .appAvg(getAppAvg(listCpuMem))
-                .build();
-    }
-
-    public static ConsolidadoTestCpuMem getConsolidatedCpuMemMetrics(List<ConsolidadoTestCpuMem> listaConsolidadoTest) {
-        double appMax = listaConsolidadoTest.stream()
-                .mapToDouble(e -> e.appMax)
-                .max().orElse(0.0);
-        double appMin = listaConsolidadoTest.stream()
-                .mapToDouble(e -> e.appMin)
-                .max().orElse(0.0);
-        double appAvg = listaConsolidadoTest.stream()
-                .mapToDouble(e -> e.appAvg)
-                .max().orElse(0.0);
-        double sysMax = listaConsolidadoTest.stream()
-                .mapToDouble(e -> e.sysMax)
-                .max().orElse(0.0);
-        double sysMin = listaConsolidadoTest.stream()
-                .mapToDouble(e -> e.sysMin)
-                .max().orElse(0.0);
-        double sysAvg = listaConsolidadoTest.stream()
-                .mapToDouble(e -> e.sysAvg)
-                .max().orElse(0.0);
-
-        return ConsolidadoTestCpuMem.builder()
-                .sysMax(sysMax)
-                .sysMin(sysMin)
-                .sysAvg(sysAvg)
-                .appMax(appMax)
-                .appMin(appMin)
-                .appAvg(appAvg)
-                .build();
-    }
-
-    public static double getAppMax(List<Cpu> listCpu) {
-        return listCpu.stream()
-                .mapToDouble(e -> e.data.app)
-                .max()
-                .orElse(0.0);
-    }
-
-    public static double getAppMin(List<Cpu> listCpu) {
-        return listCpu.stream()
-                .mapToDouble(e -> e.data.app)
-                .filter(e -> e != 0.0)
-                .min()
-                .orElse(0.0);
-    }
-
-    public static double getAppAvg(List<Cpu> listCpu) {
-        return listCpu.stream()
-                .mapToDouble(e -> e.data.app)
-                .average()
-                .orElse(0.0);
-    }
-
-    public static double getSysMax(List<Cpu> listCpu) {
-        return listCpu.stream()
-                .mapToDouble(e -> e.data.sys)
-                .max()
-                .orElse(0.0);
-    }
-
-    public static double getSysMin(List<Cpu> listCpu) {
-        return listCpu.stream()
-                .mapToDouble(e -> e.data.sys)
-                .filter(e -> e != 0.0)
-                .min()
-                .orElse(0.0);
-    }
-
-    public static double getSysAvg(List<Cpu> listCpu) {
-        return listCpu.stream()
-                .mapToDouble(e -> e.data.sys)
-                .average()
-                .orElse(0.0);
-    }
-
-    public static List<Cpu> getAllCpuMemDataFromBuild(String sessionID, String type) {
-        Type listType = new TypeToken<List<Cpu>>() {
-        }.getType();
-
-        return RestAssured.given().when().get("https://jhoan.garcia:8WDbXsiNt2x9snBBcCgC4JGIok8cSs5Isow0kNuK5UxsCIi2Xu@mobile-api.lambdatest.com/mobile-automation/api/v1/sessions/" + sessionID + "/log/appprofile?metricstype=" + type)
-                .then().extract().as(listType);
-    }
 }
