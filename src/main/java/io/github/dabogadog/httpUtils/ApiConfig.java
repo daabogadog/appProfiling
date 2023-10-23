@@ -2,7 +2,7 @@ package io.github.dabogadog.httpUtils;
 
 public class ApiConfig {
 
-    public static final String BASE_URL_LISTEJECUTION = "https://beta-api.lambdatest.com/mobile/v1.0/build?offset=0&timezone=300&limit=20";
+    public static final String BASE_URL_LISTEJECUTION = "https://beta-api.lambdatest.com/mobile/v1.0/build?offset=0&timezone=300&limit=100";
     public static final String BASE_URL_SESSIONID = "https://beta-api.lambdatest.com/mobile/v1.0/tests?buildid=";
     public static final String PARAMS_SESSIONID = "&offset=0&limit=1500&timezone=300";
     public static final String BASE_URL = "https://jhoan.garcia:8WDbXsiNt2x9snBBcCgC4JGIok8cSs5Isow0kNuK5UxsCIi2Xu@mobile-api.lambdatest.com/mobile-automation/api/v1/sessions/";
