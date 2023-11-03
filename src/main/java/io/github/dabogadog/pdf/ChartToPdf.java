@@ -14,11 +14,12 @@ public class ChartToPdf {
                                    ConsolidadoTestFps consolidadoTestFps)
     {
 
-        JFreeChart ConsolidadoTestBatterychart = ConsolidadoTestBatteryTempChart(consolidadoTestBattery);
-        JFreeChart ConsolidadoTestCpu = ConsolidadoTestCPUChart(consolidadoTestCpuM);
-        JFreeChart ConsolidadoTestMem = ConsolidadoTestMemChart(consolidadoTestMem);
+        JFreeChart ConsolidadoTestTempchart = ConsolidadoTestTempChart(consolidadoTestBattery);
+        JFreeChart ConsolidadoTestBatterychart = ConsolidadoTestBatteryChart(consolidadoTestBattery);
+        JFreeChart ConsolidadoTestCpu = ConsolidadoTestMemChart("Consolidado CPU",consolidadoTestCpuM);
+        JFreeChart ConsolidadoTestMem = ConsolidadoTestMemChart("Comosolidado Memoría",consolidadoTestMem);
         JFreeChart ConsolidadoTestFps = ConsolidadoTestFpsChart(consolidadoTestFps);
-        createSavePDF(ConsolidadoTestBatterychart,ConsolidadoTestCpu,ConsolidadoTestMem,ConsolidadoTestFps);
+        createSavePDF(ConsolidadoTestTempchart,ConsolidadoTestBatterychart,ConsolidadoTestCpu,ConsolidadoTestMem,ConsolidadoTestFps);
 
     }
 }

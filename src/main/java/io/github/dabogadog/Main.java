@@ -1,5 +1,6 @@
 package io.github.dabogadog;
 
+import com.google.gson.Gson;
 import io.github.dabogadog.models.BateryTemp.ConsolidadoTestBatteryTemp;
 import io.github.dabogadog.models.CpuMem.ConsolidadoTestCpuMem;
 import io.github.dabogadog.models.Rendering.ConsolidadoTestFps;
@@ -15,7 +16,7 @@ public class Main {
     public static void main(String[] args) {
 
         //Datos enviados
-        String name = "Regresion Android Banca Movil Av Villas Jenkins Build No.363";
+        String name = "Untitled";
         String AuthorizationBearer = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjcyOTRmZDI5YzM3NmRlZGZkYmVmNDFlZWQ4ODEyNTViOTI4Yjg1OWYxMzI3NjgzMWRlNmMyNjdjYjgwM2ExZTE5ZDRmMWZlMDUxNTMzYjViIn0.eyJhdWQiOiI0IiwianRpIjoiNzI5NGZkMjljMzc2ZGVkZmRiZWY0MWVlZDg4MTI1NWI5MjhiODU5ZjEzMjc2ODMxZGU2YzI2N2NiODAzYTFlMTlkNGYxZmUwNTE1MzNiNWIiLCJpYXQiOjE2OTQxMDI3OTIsIm5iZiI6MTY5NDEwMjc5MiwiZXhwIjoxNzI1NzI1MTkyLCJzdWIiOiI4Nzk3NzciLCJzY29wZXMiOltdLCJpZCI6ODc5Nzc3LCJlbWFpbCI6ImRhbmllbC5hYm9nYWRvQGF2YWxkaWdpdGFsbGFicy5jb20iLCJ1c2VybmFtZSI6ImRhbmllbC5hYm9nYWRvIiwibmFtZSI6ImRhbmllbCBhYm9nYWRvIiwib3JnYW5pemF0aW9uX2lkIjo2Nzg3ODksIm9yZ2FuaXphdGlvbl9yb2xlIjoiQWRtaW4iLCJpbnRlcmNvbV91c2VyX2hhc2giOiJlYTYxN2QyNDNlY2M0NWE1N2UyMzc3MDlhODdhMjBlYzgwMmYxYTZmMzY1YTZhNWIzMzcyMGM1M2JkNWZhZGRhIiwiY3JlYXRlZF9hdCI6IjIwMjItMDYtMzBUMTM6MTg6MjkuMDAwMDAwWiIsImlzcyI6bnVsbH0.JRuw8opcFJ7jcGHnmvNceEntZuwuuQT077dVN2crzFE_xZ-nDr4L6KZ2nQ764bOC1K3r3zictmTrj0-gFv6RLLDwPWegZu6ZtYLnnFw3rPPbMb4bMQ5LQlsIGDzxOBRP5JM60GukUnvLT0wrwn589hUpePxJVDUxwjgvFjDBT-d6DUTJG5awqRnO-8X5Rpx4ciYxljxH5B_aqBWUZhiWXhebYC10Hmku3OvFbXIBaWHaRgW0UWB1VbJ-wokprxsv_rtrAShpzQBPRbiq8Zm178U_c1r-N1qAtb9OaYlXgAKKznaa9KXvs2xxkKsY3uu7DOle7tC3O_D4BLlOYldPciX7H20Q9T9dLDOUOsq8IGKJqUNeaOMY27PQEecvrr2BCS4YS4KDY84JHjUOsBQsCzVMuYNjSOC0X2BO21u_IwkT3aEwZDXjAKZ4oC31bh5hrfQwyURa9xNi3rDU0uqGKDxNDgcK8kLNElVHDTQ5HbD3TB90dVa-JjG4LEKyQxJR2oe1bclLxM_CWxXRsje-77Rk_HleH3YPZ_1V_asKYp0DAQxM7Ng5lpPnwU6gIC_wIXJj9PM53R4VOjPmne6Ws1R_Cd2Zbm-MK7DcyxyN3AsxPR98n1bXdep4l6o5mTAt250l4sTJkLiNYpWgIZ3FGfFmBgpXKLiJwrK_mBVuogI";
         String AuthorizationBasic = "Basic ZGFuaWVsLmFib2dhZG86dVFtV0tLODlFYTJPazV6d1c2TlQ0aWQ2RGJQTlZqNnpNNFc5bm0xcXBDaENMZXg0TVI=";
         //Obtiene el id de grupo de test
@@ -29,6 +30,8 @@ public class Main {
         ConsolidadoTestCpuMem consolidadoTestMem = getMemMetrics(sessionIdsArray, "mem");
         ConsolidadoTestBatteryTemp consolidadoTestBattery = getBatteryTempMetrics(sessionIdsArray);
         ConsolidadoTestFps consolidadoTestFps = getFpsMetrics(sessionIdsArray);
+//        Gson gson = new Gson();
+//        String json = gson.toJson(consolidadoTestFps);
 
 
         printData(consolidadoTestCpu, consolidadoTestMem,consolidadoTestBattery,consolidadoTestFps);
