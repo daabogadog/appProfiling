@@ -17,6 +17,7 @@ public class ManageFpsData {
     public static List<Fps> getAllFpsDataFromBuild(String sessionID) {
         Type listType = new TypeToken<List<Fps>>() {
         }.getType();
+        System.out.println("Obteniendo metricas de fps");
 
         return RestAssured.given().when().get(BASE_URL + sessionID + PARAMS_APIRENDERING)
                 .then().extract().as(listType);

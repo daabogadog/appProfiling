@@ -81,7 +81,7 @@ public class ManageCpuData {
     public static List<Cpu> getAllCpuMemDataFromBuild(String sessionID, String type) {
         Type listType = new TypeToken<List<Cpu>>() {
         }.getType();
-
+        System.out.println("Obteniendo metricas de cpu y memoria");
         return RestAssured.given().when().get(BASE_URL + sessionID + "/log/appprofile?metricstype=" + type)
                 .then().extract().as(listType);
     }

@@ -18,6 +18,7 @@ public class ManageBatteryTempData {
     public static List<BatteryTemp> getAllBatteryTempDataFromBuild(String sessionID) {
         Type listType = new TypeToken<List<BatteryTemp>>() {
         }.getType();
+        System.out.println("Obteniendo metricas de bateria y temp");
 
         return RestAssured.given().when().get(BASE_URL + sessionID + PARAMS_APIBATTERY)
                 .then().extract().as(listType);
@@ -61,7 +62,7 @@ public class ManageBatteryTempData {
                 .mapToDouble(e -> e.temperatureAvg)
                 .max().orElse(0.0);
         double batteryMax = listaConsolidadoTest.stream()
-                .mapToDouble(e -> e.temperatureMax)
+                .mapToDouble(e -> e.batteryMax)
                 .max().orElse(0.0);
         double batteryMin = listaConsolidadoTest.stream()
                 .mapToDouble(e -> e.batteryMin)
