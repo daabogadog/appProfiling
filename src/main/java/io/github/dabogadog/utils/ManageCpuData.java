@@ -8,10 +8,13 @@ import io.restassured.RestAssured;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static io.github.dabogadog.httpUtils.ApiConfig.BASE_URL;
 
 public class ManageCpuData {
+    private static Logger logger = Logger.getLogger(ManageCpuData.class.getName());
 
     public static ConsolidadoTestCpuMem getCpuMetrics(String[] sessionIdsArray, String type) {
         List<ConsolidadoTestCpuMem> listaConsolidadoTestCpuMem = getCpuMemMetricsFromEachTest(sessionIdsArray, type);
@@ -27,10 +30,13 @@ public class ManageCpuData {
         List<ConsolidadoTestCpuMem> listaConsolidadoTestCpuMem = new ArrayList<>();
 
         for (String sessionID : sessionIdList) {
+            logger.log(Level.INFO, "Getting Memory And Cpu data");
             List<Cpu> listCpuMem = getAllCpuMemDataFromBuild(sessionID, type);
             ConsolidadoTestCpuMem metricsFromEachTest = getMetricForEachTest(listCpuMem);
             listaConsolidadoTestCpuMem.add(metricsFromEachTest);
         }
+        logger.log(Level.INFO, "Cpu done");
+
         return listaConsolidadoTestCpuMem;
     }
 
@@ -81,7 +87,6 @@ public class ManageCpuData {
     public static List<Cpu> getAllCpuMemDataFromBuild(String sessionID, String type) {
         Type listType = new TypeToken<List<Cpu>>() {
         }.getType();
-        System.out.println("Obteniendo metricas de cpu y memoria");
         return RestAssured.given().when().get(BASE_URL + sessionID + "/log/appprofile?metricstype=" + type)
                 .then().extract().as(listType);
     }

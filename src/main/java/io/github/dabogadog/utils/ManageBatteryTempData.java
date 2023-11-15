@@ -3,22 +3,23 @@ package io.github.dabogadog.utils;
 import com.google.gson.reflect.TypeToken;
 import io.github.dabogadog.models.BateryTemp.BatteryTemp;
 import io.github.dabogadog.models.BateryTemp.ConsolidadoTestBatteryTemp;
-import io.github.dabogadog.models.CpuMem.ConsolidadoTestCpuMem;
-import io.github.dabogadog.models.CpuMem.Cpu;
 import io.restassured.RestAssured;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static io.github.dabogadog.httpUtils.ApiConfig.BASE_URL;
 import static io.github.dabogadog.httpUtils.ApiConfig.PARAMS_APIBATTERY;
 
 public class ManageBatteryTempData {
+    private static Logger logger = Logger.getLogger(ManageBatteryTempData.class.getName());
+
     public static List<BatteryTemp> getAllBatteryTempDataFromBuild(String sessionID) {
         Type listType = new TypeToken<List<BatteryTemp>>() {
         }.getType();
-        System.out.println("Obteniendo metricas de bateria y temp");
 
         return RestAssured.given().when().get(BASE_URL + sessionID + PARAMS_APIBATTERY)
                 .then().extract().as(listType);
@@ -45,10 +46,13 @@ public class ManageBatteryTempData {
         List<ConsolidadoTestBatteryTemp> listaConsolidadoTestBaterryTemp = new ArrayList<>();
 
         for (String sessionID : sessionIdList) {
+            logger.log(Level.INFO, "Getting Battery And Temperature data");
             List<BatteryTemp> listBatteryTemp = getAllBatteryTempDataFromBuild(sessionID);
             ConsolidadoTestBatteryTemp metricsFromEachTest = getMetricForEachTest(listBatteryTemp);
             listaConsolidadoTestBaterryTemp.add(metricsFromEachTest);
         }
+        logger.log(Level.INFO, "Battery temperature done");
+
         return listaConsolidadoTestBaterryTemp;
     }
     public static ConsolidadoTestBatteryTemp getConsolidatedBatteryTempMetrics(List<ConsolidadoTestBatteryTemp> listaConsolidadoTest) {

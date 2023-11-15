@@ -1,8 +1,6 @@
 package io.github.dabogadog.utils;
 
 import com.google.gson.reflect.TypeToken;
-import io.github.dabogadog.models.BateryTemp.BatteryTemp;
-import io.github.dabogadog.models.BateryTemp.ConsolidadoTestBatteryTemp;
 import io.github.dabogadog.models.Rendering.ConsolidadoTestFps;
 import io.github.dabogadog.models.Rendering.Fps;
 import io.restassured.RestAssured;
@@ -10,14 +8,18 @@ import io.restassured.RestAssured;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import static io.github.dabogadog.httpUtils.ApiConfig.*;
+import static io.github.dabogadog.httpUtils.ApiConfig.BASE_URL;
+import static io.github.dabogadog.httpUtils.ApiConfig.PARAMS_APIRENDERING;
 
 public class ManageFpsData {
+    private static Logger logger = Logger.getLogger(ManageFpsData.class.getName());
+
     public static List<Fps> getAllFpsDataFromBuild(String sessionID) {
         Type listType = new TypeToken<List<Fps>>() {
         }.getType();
-        System.out.println("Obteniendo metricas de fps");
 
         return RestAssured.given().when().get(BASE_URL + sessionID + PARAMS_APIRENDERING)
                 .then().extract().as(listType);
@@ -40,10 +42,13 @@ public class ManageFpsData {
         List<ConsolidadoTestFps> listaConsolidadoTestFps = new ArrayList<>();
 
         for (String sessionID : sessionIdList) {
+            logger.log(Level.INFO, "Getting Fps data");
             List<Fps> fpsList = getAllFpsDataFromBuild(sessionID);
             ConsolidadoTestFps metricsFromEachTest = getMetricForEachTest(fpsList);
             listaConsolidadoTestFps.add(metricsFromEachTest);
         }
+        logger.log(Level.INFO, "Fps done");
+
         return listaConsolidadoTestFps;
     }
     public static ConsolidadoTestFps getConsolidatedFpsMetrics(List<ConsolidadoTestFps> listaConsolidadoTest) {
