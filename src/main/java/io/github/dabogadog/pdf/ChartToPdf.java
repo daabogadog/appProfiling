@@ -17,7 +17,7 @@ public class ChartToPdf {
         JFreeChart ConsolidadoTestTempchart = ConsolidadoTestTempChart(consolidadoTestBattery);
         JFreeChart ConsolidadoTestBatterychart = ConsolidadoTestBatteryChart(consolidadoTestBattery);
         JFreeChart ConsolidadoTestCpu = ConsolidadoTestMemChart("Consolidado CPU",consolidadoTestCpuM);
-        JFreeChart ConsolidadoTestMem = ConsolidadoTestMemChart("Comosolidado Memoría",consolidadoTestMem);
+        JFreeChart ConsolidadoTestMem = ConsolidadoTestMemChart("Consolidado Memoría",consolidadoTestMem);
         JFreeChart ConsolidadoTestFps = ConsolidadoTestFpsChart(consolidadoTestFps);
         createSavePDF(ConsolidadoTestTempchart,ConsolidadoTestBatterychart,ConsolidadoTestCpu,ConsolidadoTestMem,ConsolidadoTestFps);
 
