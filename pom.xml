@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.daabogadog</groupId>
     <artifactId>appProfiling</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
     <packaging>jar</packaging>
     <name>appProfiling</name>
     <description>Librería de Java para LambdaTest App Automation Esta librería de Java facilita la interacción con los servicios de App Automation de LambdaTest para obtener datos de App Profiling, CPU/Memory Rendering, Network, Battery(%), y Temperature. Con esta librería, puedes integrar fácilmente estas capacidades en tu proyecto Java.</description>
